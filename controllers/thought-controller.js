@@ -49,18 +49,15 @@ module.exports = {
     updateThoughtById(req, res) {
         thought.findOneAndUpdate(
             { _id: req.params.thoughtId },
-            { $addToSet: req.body },
-            { runValidators: true, new: true }
+            { $set: req.body },
+            { runValidators: true, New: true }
         )
-            .then((thought) =>
-                !thought
-                    ? res.status(404).json({ message: 'No thought with this id!' })
-                    : res.json(thought)
+            .then((user) =>
+                !user
+                    ? res.status(404).json({ message: "No thought found with this ID!" })
+                    : res.json(user)
             )
-            .catch((err) => {
-                console.log(err);
-                res.status(500).json(err);
-            });
+            .catch((err) => res.status(500).json(err));
     },
     // delete thought by ID
     deleteThoughtById(req, res) {
