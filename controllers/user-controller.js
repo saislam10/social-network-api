@@ -31,30 +31,13 @@ const { user, thought } = require('../models');
 module.exports = {
     // create a new user
     createUser(req, res) {
-        if (req.body.userId) {
-            user.create(req.body)
-                .then((user) => {
-                    return user.findOneAndUpdate(
-                        { _id: req.body.userId },
-                        { $addToSet: { users: user } },
-                        { new: true }
-                    );
-                })
-                .then((user) =>
-                    !user
-                        ? res.status(404).json({
-                            message: 'user created, but found no user with that ID',
-                        })
-                        : res.json('Created the user 🎉')
-                )
-                .catch((err) => {
-                    console.log(err);
-                    return res.status(500).json(err);
-                });
-        } else {
-            return res.status(404).json({ message: 'userId not provided!' });
-        }
-    },
+        user.create(req.body)
+          .then((user) => res.json(user))
+          .catch((err) => {
+            console.log(err);
+            return res.status(500).json(err);
+          });
+      },
 
     // // get all users
     getUsers(req, res) {
@@ -123,7 +106,7 @@ module.exports = {
     },
 
     deleteFriendById(req, res) {
-        user.findOneAndDelete(
+        user.findOneAndUpdate(
             { _id: req.params.userId },
             { $pull: { friends: req.params.friendId } },
             { new: true }
