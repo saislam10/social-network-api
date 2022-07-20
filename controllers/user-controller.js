@@ -92,7 +92,7 @@ module.exports = {
                 res.status(500).json(err);
             });
     },
-    deleteUser(req, res) {
+    deleteUserById(req, res) {
         user.findOneAndRemove({ _id: req.params.userId })
             .then((user) =>
                 !user
